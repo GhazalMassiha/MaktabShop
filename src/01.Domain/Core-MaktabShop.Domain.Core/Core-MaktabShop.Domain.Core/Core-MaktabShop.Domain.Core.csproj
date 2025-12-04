@@ -7,4 +7,22 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="CategoryAgg\Contracts\AppServiceContract\" />
+    <Folder Include="CategoryAgg\Contracts\RepositoryContract\" />
+    <Folder Include="CategoryAgg\Contracts\ServiceContract\" />
+    <Folder Include="OrderAgg\Contracts\AppServiceContract\" />
+    <Folder Include="OrderAgg\Contracts\RepositoryContract\" />
+    <Folder Include="OrderAgg\Contracts\ServiceContract\" />
+    <Folder Include="OrderItemAgg\Contracts\AppServiceContract\" />
+    <Folder Include="OrderItemAgg\Contracts\RepositoryContract\" />
+    <Folder Include="OrderItemAgg\Contracts\ServiceContract\" />
+    <Folder Include="ProductAgg\Contracts\AppServiceContract\" />
+    <Folder Include="ProductAgg\Contracts\RepositoryContract\" />
+    <Folder Include="ProductAgg\Contracts\ServiceContract\" />
+    <Folder Include="UserAgg\Contracts\AppServiceContract\" />
+    <Folder Include="UserAgg\Contracts\ServiceContract\" />
+    <Folder Include="UserAgg\Contracts\RepositoryContract\" />
+  </ItemGroup>
+
 </Project>
