@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/00.Framework/">
+    <Project Path="00.Framework/Framework-MaktabShop.Framework/Framework-MaktabShop.Framework.csproj" Id="02490e82-2fde-499b-8089-12a36e0527da" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/01.Domain/" />
+  <Folder Name="/src/01.Domain/Core-MaktabShop.Domain.Core/">
+    <Project Path="src/01.Domain/Core-MaktabShop.Domain.Core/Core-MaktabShop.Domain.Core/Core-MaktabShop.Domain.Core.csproj" Id="396905b4-401f-4cfb-9377-a718e295a5a7" />
+  </Folder>
+  <Folder Name="/src/01.Domain/Service/" />
+  <Folder Name="/src/01.Domain/Service/MaktabShop-Domain.AppService/">
+    <Project Path="src/01.Domain/Service/MaktabShop-Domain.AppService/AppService-MaktabShop.Domain.AppService/AppService-MaktabShop.Domain.AppService.csproj" Id="7b3e9106-4313-438f-9d3f-e217f493853a" />
+  </Folder>
+  <Folder Name="/src/01.Domain/Service/MaktabShop-Domain.Service/">
+    <Project Path="src/01.Domain/Service/MaktabShop-Domain.Service/Service-MaktabShop.Domain.Service/Service-MaktabShop.Domain.Service.csproj" Id="cabe5b9c-f9b3-4f34-a1f3-817876940b68" />
+  </Folder>
+  <Folder Name="/src/02.Infrastructure/" />
+  <Folder Name="/src/02.Infrastructure/DataAccess-MaktabShop.Infra.Data.Repo.EFCore/">
+    <Project Path="src/02.Infrastructure/DataAccess-MaktabShop.Infra.Data.Repo.EFCore/MaktabShop.Infra.Repo.EFCore/MaktabShop.Infra.Repo.EFCore.csproj" Id="ba4ca18d-9f10-44c8-94cc-93d24c7afbd5" />
+  </Folder>
+  <Folder Name="/src/02.Infrastructure/Db-MaktabShop.infra.Db.SqlServer.EFCore/">
+    <Project Path="src/02.Infrastructure/Db-MaktabShop.infra.Db.SqlServer.EFCore/MaktabShop.Infra.SqlServer.EFCore/MaktabShop.Infra.SqlServer.EFCore.csproj" Id="d2609549-3c4a-4fe7-bcee-261df47035da" />
+  </Folder>
+  <Folder Name="/src/03.Presentation-MaktabShop-EndPoint/">
+    <Project Path="src/03.Presentation-MaktabShop-EndPoint/MaktabShop-EndPoimt.MVC/MaktabShop-EndPoimt.MVC.csproj" Id="ff2f1fc1-5908-405f-8e4b-6001b57f6f23" />
+  </Folder>
+</Solution>
