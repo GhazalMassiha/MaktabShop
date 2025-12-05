@@ -14,6 +14,11 @@ namespace Core_MaktabShop.Domain.Core.OrderItemAgg.Entities
 
         public int Count { get; set; }
         public decimal UnitPrice { get; set; }
-        public decimal TotalPrice => UnitPrice * Count;
+        public decimal TotalPrice { get; private set; }
+
+        private void CalculateTotalPrice ()
+        {
+            TotalPrice = Count * UnitPrice;
+        }
     }
 }

@@ -31,6 +31,10 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
+            builder.Property(u => u.Address)
+                .IsRequired()
+                .HasMaxLength(100);
+
             builder.Property(u => u.Wallet)
                 .HasColumnType("decimal(18,2)");
 
@@ -40,7 +44,7 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
 
             builder.HasMany(o => o.Orders)
                 .WithOne(u => u.User)
-                .HasForeignKey(u => u.User.Id)
+                .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
         }

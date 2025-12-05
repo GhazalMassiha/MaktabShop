@@ -1,9 +1,6 @@
-﻿using Core_MaktabShop.Domain.Core._common;
-using Core_MaktabShop.Domain.Core.OrderAgg.Entities;
-
-namespace Core_MaktabShop.Domain.Core.UserAgg.Entities
+﻿namespace Core_MaktabShop.Domain.Core.UserAgg.DTOs
 {
-    public class User : BaseEntity
+    public class UserCreateDto
     {
         public string Username { get; set; }
         public string PasswordHash { get; set; }
@@ -11,8 +8,6 @@ namespace Core_MaktabShop.Domain.Core.UserAgg.Entities
         public string LastName { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
-        public decimal Wallet { get; set; }
 
-        public List<Order>? Orders { get; set; }
     }
 }

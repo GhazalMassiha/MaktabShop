@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\02.Infrastructure\DataAccess-MaktabShop.Infra.Data.Repo.EFCore\MaktabShop.Infra.Repo.EFCore\MaktabShop.Infra.Repo.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Core-MaktabShop.Domain.Core\Core-MaktabShop.Domain.Core\Core-MaktabShop.Domain.Core.csproj" />
+  </ItemGroup>
+
 </Project>
