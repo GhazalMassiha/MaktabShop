@@ -4,6 +4,7 @@ using MaktabShop.Infra.SqlServer.EFCore.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaktabShop.Infra.SqlServer.EFCore.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251205114017_seeddata2")]
+    partial class seeddata2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,17 +258,6 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Migrations
                             Name = "کت خز سفید زنانه",
                             Price = 7750000m,
                             Stock = 5
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CategoryId = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "«کت سفید با بافت خز ـ انتخابی لوکس و خاص برای فصل سرما. این کت جلوه‌ی زمستانی دارد و می‌تواند نقطه تمرکز استایل شما باشد؛ مناسب برای مهمانی، بیرون رفتن یا خیابان‌گردی در هوای سرد.»",
-                            ImageUrl = "/images/products/women-test.jpg",
-                            Name = "آیتم تست",
-                            Price = 1000m,
-                            Stock = 100
                         });
                 });
 

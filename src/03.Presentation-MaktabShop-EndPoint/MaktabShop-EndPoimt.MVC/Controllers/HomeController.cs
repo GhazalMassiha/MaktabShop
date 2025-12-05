@@ -1,25 +1,41 @@
+using Core_MaktabShop.Domain.Core.CategoryAgg.Contracts.AppServiceContract;
+using Core_MaktabShop.Domain.Core.ProductAgg.Contracts.AppServiceContract;
 using MaktabShop_EndPoimt.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
-namespace MaktabShop_EndPoimt.MVC.Controllers
+public class HomeController(IProductAppService productAppService, ICategoryAppService categoryAppService) : Controller
 {
-    public class HomeController : Controller
+    public async Task<IActionResult> Index()
     {
-        public IActionResult Index()
+        var catRes = await categoryAppService.GetAll(CancellationToken.None);
+        var prodRes = await productAppService.GetAll(CancellationToken.None);
+
+        if (!catRes.IsSuccess || !prodRes.IsSuccess)
         {
-            return View();
+            return View("Error");
         }
 
-        public IActionResult Privacy()
+        var vm = new HomeIndexViewModel
         {
-            return View();
-        }
+            Categories = catRes.Data
+                .Select(c => new CategoryViewModel { Id = c.Id, Name = c.Name })
+                .ToList(),
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+            Products = prodRes.Data
+                .Select(p => new ProductViewModel
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    ImageUrl = p.ImageUrl,
+                    Stock = p.Stock,
+                    CategoryId = p.CategoryId,
+                    CategoryName = p.CategoryName,
+                    Description = p.Description
+
+                }).ToList()
+        };
+
+        return View(vm);
     }
 }

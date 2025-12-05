@@ -24,6 +24,12 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
                 .WithOne(p => p.Category)
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasData(
+                new Category { Id = 1, Name = "مردانه" },
+
+                new Category { Id = 2, Name = "زنانه"}
+                );
         }
     }
 }

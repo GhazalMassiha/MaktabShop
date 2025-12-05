@@ -1,0 +1,19 @@
+﻿@model MaktabShop_EndPoimt.MVC.Models.LoginViewModel
+@{
+    ViewData["Title"] = "ورود";
+}
+<h2>ورود</h2>
+
+<form asp-action="Login" method="post">
+    <div>
+        <label>نام کاربری</label>
+        <input asp-for="Username" required />
+    </div>
+    <div>
+        <label>رمز عبور</label>
+        <input asp-for="Password" type="password" required />
+    </div>
+    <button type="submit" class="btn">ورود</button>
+</form>
+
+<p>حساب نداری؟ <a asp-action="Register">ثبت نام</a></p>

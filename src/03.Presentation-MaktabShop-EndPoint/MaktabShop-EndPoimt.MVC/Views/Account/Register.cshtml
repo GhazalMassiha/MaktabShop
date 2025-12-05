@@ -1,0 +1,33 @@
+﻿@model MaktabShop_EndPoimt.MVC.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "ثبت نام";
+}
+<h2>ثبت نام</h2>
+<form asp-action="Register" method="post">
+    <div>
+        <label>نام کاربری</label>
+        <input asp-for="Username" required />
+    </div>
+    <div>
+        <label>رمز عبور</label>
+        <input asp-for="Password" type="password" required />
+    </div>
+    <div>
+        <label>نام</label>
+        <input asp-for="FirstName" required />
+    </div>
+    <div>
+        <label>نام خانوادگی</label>
+        <input asp-for="LastName" required />
+    </div>
+    <div>
+        <label>تلفن</label>
+        <input asp-for="Phone" required />
+    </div>
+    <div>
+        <label>نشانی</label>
+        <input asp-for="Address" required />
+    </div>
+    <button type="submit">ثبت نام</button>
+</form>
+<p>قبلاً ثبت‌نام کرده‌اید؟ <a asp-action="Login">ورود</a></p>

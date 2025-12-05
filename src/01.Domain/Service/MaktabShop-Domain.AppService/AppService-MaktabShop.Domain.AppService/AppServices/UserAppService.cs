@@ -18,8 +18,17 @@ namespace AppService_MaktabShop.Domain.AppService.AppServices
 
         public async Task<Result<UserLoginDto?>> Login(string username, string password, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-                return Result<UserLoginDto?>.Failure("نام کاربری و رمز عبور الزامی است.");
+            if (string.IsNullOrWhiteSpace(username))
+                return Result<UserLoginDto?>.Failure("نام کاربری نمیتواند خالی باشد");
+
+            if (username.Length < 3)
+                return Result<UserLoginDto?>.Failure("نام کاربری نمیتواند کمتر از 3 کاراکتر باشد");
+
+            if (string.IsNullOrWhiteSpace(password))
+                return Result<UserLoginDto?>.Failure("رمز عبور نمیتواند خالی باشد");
+
+            if (username.Length < 6)
+                return Result<UserLoginDto?>.Failure("نام کاربری نمیتواند کمتر از 6 کاراکتر باشد");
 
             var user = await userService.Login(username , password, cancellationToken);
             if (user == null)

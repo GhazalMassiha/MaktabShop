@@ -1,0 +1,31 @@
+﻿@model CheckoutViewModel
+@{
+    ViewData["Title"] = "تسویه حساب";
+}
+
+<h2>تسویه حساب</h2>
+
+@if (Model.Order == null || Model.Order.Items == null || !Model.Order.Items.Any())
+{
+    <p>سبد خرید خالی است.</p>
+    <a asp-controller="Cart" asp-action="Index">بازگشت به سبد خرید</a>
+}
+else
+{
+    <div style="margin-bottom:1rem;">
+        <h3>موجودی کیف پول شما: @Model.WalletBalance.ToString("N0") تومان</h3>
+        <h3>جمع کل: @Model.Order.Total.ToString("N0") تومان</h3>
+    </div>
+
+    @if (Model.WalletBalance < Model.Order.Total)
+    {
+        <p style="color:red;">موجودی حساب شما کافی نیست.</p>
+        <a asp-controller="Cart" asp-action="Index">بازگشت به سبد خرید</a>
+    }
+    else
+    {
+        <form asp-action="Confirm" asp-controller="Checkout" method="post">
+            <button type="submit" class="btn">پرداخت و ثبت سفارش</button>
+        </form>
+    }
+}

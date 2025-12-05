@@ -1,0 +1,19 @@
+﻿@model List<ProductViewModel>
+@{
+    ViewData["Title"] = "محصولات دسته‌بندی";
+}
+
+<h2 style="margin-bottom:1rem;">محصولات</h2>
+<div class="products-grid">
+    @foreach (var p in Model)
+    {
+        <div class="product-card">
+            <img src="@p.ImageUrl" alt="@p.Name" />
+            <div class="info">
+                <h3>@p.Name</h3>
+                <div class="price">@p.Price.ToString("N0") تومان</div>
+                <a href="@Url.Action("Details", "Product", new { id = p.Id })" class="btn">جزئیات</a>
+            </div>
+        </div>
+    }
+</div>

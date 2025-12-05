@@ -47,6 +47,42 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
                 .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasData(
+                 new User
+                 {
+                     Id = 1,
+                     Username = "ghazal",
+                     PasswordHash = "123456",   
+                     FirstName = "غزل",
+                     LastName = "مسیحا",
+                     Phone = "09123456789",
+                     Address = "تهران، شهرک غرب",
+                     Wallet = 10000000M,
+                 },
+                new User
+                {
+                    Id = 2,
+                    Username = "mersedeh",
+                    PasswordHash = "123456",
+                    FirstName = "مرسده",
+                    LastName = "کسروی",
+                    Phone = "09111223344",
+                    Address = "رشت، گلسار",
+                    Wallet = 7000000,
+                },
+                new User
+                {
+                    Id = 3,
+                    Username = "amir",
+                    PasswordHash = "123456",
+                    FirstName = "امیر",
+                    LastName = "ساعدی نیا",
+                    Phone = "09111223343",
+                    Address = "تهران، پونک",
+                    Wallet = 5000000M,
+                }
+                );
+
         }
     }
 }
