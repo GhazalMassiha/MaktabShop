@@ -1,0 +1,32 @@
+﻿@model Core_MaktabShop.Domain.Core.OrderAgg.DTOs.OrderDto
+
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewData["Title"] = "جزئیات سفارش";
+}
+
+<h2>جزئیات سفارش</h2>
+
+<table class="table table-bordered">
+    <tr><th>شناسه سفارش</th><td>@Model.Id</td></tr>
+    <tr><th>شناسه کاربر</th><td>@Model.UserId</td></tr>
+    <tr><th>جمع مبلغ</th><td>@Model.TotalPrice.ToString("N0")</td></tr>
+</table>
+
+<h3 class="mt-4">آیتم‌های سفارش</h3>
+<table class="table table-striped">
+    <thead>
+        <tr><th>نام محصول</th><th>قیمت واحد</th><th>تعداد</th><th>قیمت کل</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.UnitPrice.ToString("N0")</td>
+                <td>@item.Count</td>
+                <td>@item.TotalPrice.ToString("N0")</td>
+            </tr>
+        }
+    </tbody>
+</table>

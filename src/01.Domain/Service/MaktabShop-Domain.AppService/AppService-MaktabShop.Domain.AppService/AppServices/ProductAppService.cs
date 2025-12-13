@@ -2,6 +2,7 @@
 using Core_MaktabShop.Domain.Core.ProductAgg.Contracts.AppServiceContract;
 using Core_MaktabShop.Domain.Core.ProductAgg.Contracts.ServiceContract;
 using Core_MaktabShop.Domain.Core.ProductAgg.DTOs;
+using Service_MaktabShop.Domain.Service.Services;
 
 namespace AppService_MaktabShop.Domain.AppService.AppServices
 {
@@ -54,6 +55,33 @@ namespace AppService_MaktabShop.Domain.AppService.AppServices
                 return Result<bool>.Failure("خطا در بروزرسانی موجودی کالا.");
 
             return Result<bool>.Success("موجودی کالا با موفقیت بروزرسانی شد.", true);
+        }
+
+        public async Task<Result<bool>> AddProduct(ProductCreateDto dto, CancellationToken cancellationToken)
+        {
+            var ok = await productService.AddProduct(dto, cancellationToken);
+            if (!ok)
+                return Result<bool>.Failure("خطا در ایجاد کالا.");
+
+            return Result<bool>.Success("کالا با موفقیت ایجاد شد.", true);
+        }
+
+        public async Task<Result<bool>> UpdateProduct(int id, ProductCreateDto dto, CancellationToken cancellationToken)
+        {
+            var ok = await productService.UpdateProduct(id, dto, cancellationToken);
+            if (!ok)
+                return Result<bool>.Failure("خطا در بروزرسانی کالا.");
+
+            return Result<bool>.Success("کالا با موفقیت بروزرسانی شد.", true);
+        }
+
+        public async Task<Result<bool>> DeleteProduct(int id, CancellationToken cancellationToken)
+        {
+            var ok = await productService.DeleteProduct(id, cancellationToken);
+            if (!ok)
+                return Result<bool>.Failure("خطا در حذف کالا.");
+
+            return Result<bool>.Success("کالا با موفقیت حذف شد.", true);
         }
     }
 }

@@ -1,0 +1,44 @@
+﻿@model Core_MaktabShop.Domain.Core.ProductAgg.DTOs.ProductCreateDto
+
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewData["Title"] = "ایجاد محصول";
+}
+
+<h2>ایجاد محصول جدید</h2>
+
+<form asp-action="Create" method="post" class="row g-3">
+    <div class="col-md-6">
+        <label>نام</label>
+        <input asp-for="Name" class="form-control" required />
+    </div>
+
+    <div class="col-md-6">
+        <label>دسته‌بندی</label>
+        <input asp-for="CategoryId" class="form-control" required />
+    </div>
+
+    <div class="col-md-4">
+        <label>قیمت</label>
+        <input asp-for="Price" class="form-control" required />
+    </div>
+
+    <div class="col-md-4">
+        <label>موجودی</label>
+        <input asp-for="Stock" class="form-control" required />
+    </div>
+
+    <div class="col-md-4">
+        <label>آدرس عکس</label>
+        <input asp-for="ImageUrl" class="form-control" required />
+    </div>
+
+    <div class="col-12">
+        <label>توضیحات</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-success">ثبت</button>
+    </div>
+</form>

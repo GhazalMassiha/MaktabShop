@@ -3,62 +3,117 @@ using Core_MaktabShop.Domain.Core.OrderAgg.Contracts.AppServiceContract;
 using Core_MaktabShop.Domain.Core.OrderAgg.Contracts.ServiceContract;
 using Core_MaktabShop.Domain.Core.OrderAgg.DTOs;
 using Core_MaktabShop.Domain.Core.OrderItemAgg.Contracts.ServiceContract;
+using Core_MaktabShop.Domain.Core.OrderItemAgg.DTOs;
 using Core_MaktabShop.Domain.Core.ProductAgg.Contracts.ServiceContract;
 using Core_MaktabShop.Domain.Core.UserAgg.Contracts.ServiceContract;
+using Service_MaktabShop.Domain.Service.Services;
 
 namespace AppService_MaktabShop.Domain.AppService.AppServices
 {
     public class OrderAppService(IOrderService orderService, IOrderItemService orderItemService, IUserService userService
             , IProductService productService) : IOrderAppService
     {
-        public async Task<Result<bool>> WalletOperationToOrder(OrderCreateDto orderDto, CancellationToken cancellationToken)
+        public async Task<Result<OrderDto>> Create(OrderCreateDto orderDto, CancellationToken cancellationToken)
         {
             var wallet = await userService.GetUserWalletBalance(orderDto.UserId, cancellationToken);
             if (wallet < orderDto.TotalPrice)
-            {
-                return Result<bool>.Failure("موجودی حساب شما کافی نمیباشد.");
-            }
+                return Result<OrderDto>.Failure("موجودی حساب شما کافی نمی‌باشد.");
 
             var newWalletBalance = wallet - orderDto.TotalPrice;
-            var walletDeductionResult = await userService.UpdateUserWallet(orderDto.UserId, newWalletBalance, cancellationToken);
-            if (!walletDeductionResult)
-                return Result<bool>.Failure("خطا در انجام عملیات کیف پول.");
+            var walletOk = await userService.UpdateUserWallet(orderDto.UserId, newWalletBalance, cancellationToken);
+            if (!walletOk)
+                return Result<OrderDto>.Failure("خطا در بروزرسانی کیف پول.");
 
-            return Result<bool>.Success("عملیات کیف پول با موفقیت انجام شد.", true);
-        }
-
-        public async Task<Result<bool>> Create(OrderCreateDto orderDto, CancellationToken cancellationToken)
-        {
-
-            await WalletOperationToOrder(orderDto, cancellationToken);
 
             var ok = await orderService.Create(orderDto, cancellationToken);
             if (!ok)
-            {
-                return Result<bool>.Failure("خطا در ثبت سفارش.");
-            }
+                return Result<OrderDto>.Failure("خطا در ثبت سفارش.");
+
+
+            var savedOrder = await orderService.GetLastOrderForUser(orderDto.UserId, orderDto.TotalPrice, cancellationToken);
+            if (savedOrder == null)
+                return Result<OrderDto>.Failure("خطا در بازیابی سفارش ثبت‌شده.");
+
 
             foreach (var item in orderDto.OrederItems)
             {
-                item.OrderId = orderDto.UserId;
-
-                var newProductStock = await productService.GetProductStockById(item.ProductId, cancellationToken) - item.Count;
-
-                var stockOk = await productService.UpdateProductStock(item.ProductId, newProductStock, cancellationToken);
-                if (!stockOk)
-                {
-                    return Result<bool>.Failure("خطا در بروزرسانی موجودی کالا.");
-                }
-
+                item.OrderId = savedOrder.Id;
             }
+
 
             var finalOrderOk = await orderItemService.Add(orderDto.OrederItems, cancellationToken);
             if (!finalOrderOk)
+                return Result<OrderDto>.Failure("خطا در ثبت آیتم‌های سفارش.");
+
+
+            foreach (var item in orderDto.OrederItems)
             {
-                return Result<bool>.Failure("خطا در ثبت نهایی سفارش.");
+                var currentStock = await productService.GetProductStockById(item.ProductId, cancellationToken);
+                var newStock = currentStock - item.Count;
+
+                var stockOk = await productService.UpdateProductStock(item.ProductId, newStock, cancellationToken);
+                if (!stockOk)
+                    return Result<OrderDto>.Failure("خطا در بروزرسانی موجودی کالا.");
             }
 
-            return Result<bool>.Success("سفارش شما با موفقیت پرداخت و ثبت نهایی شد.", true);
+
+            savedOrder.OrderItems = orderDto.OrederItems
+                .Select(i => new OrderItemDto
+                {
+                    ProductId = i.ProductId,
+                    Count = i.Count,
+                    UnitPrice = i.UnitPrice,
+                    TotalPrice = i.Count * i.UnitPrice
+                })
+                .ToList();
+
+            return Result<OrderDto>.Success("سفارش با موفقیت ثبت شد.", savedOrder);
+        }
+
+        public async Task<Result<List<OrderDto>>> GetAllOrders(CancellationToken cancellationToken)
+        {
+            var orders = await orderService.GetAllOrders(cancellationToken);
+            return Result<List<OrderDto>>.Success("سفارش‌ها با موفقیت بازیابی شدند.", orders);
+        }
+
+        public async Task<Result<OrderDto?>> GetOrderDetails(int orderId, CancellationToken cancellationToken)
+        {
+            var order = await orderService.GetOrderDetails(orderId, cancellationToken);
+            if (order == null)
+                return Result<OrderDto?>.Failure("سفارش یافت نشد.");
+
+            return Result<OrderDto?>.Success("جزئیات سفارش بازیابی شد.", order);
+        }
+
+        public async Task<Result<DashboardDto>> GetDashboardStats(CancellationToken cancellationToken)
+        {
+            var products = await productService.GetAll(cancellationToken);
+            var users = await userService.GetAll(cancellationToken);
+            var orders = await orderService.GetAllOrders(cancellationToken);
+
+            var model = new DashboardDto
+            {
+                TotalProducts = products.Count,
+                TotalUsers = users.Count,
+                TotalOrders = orders.Count,
+                TotalSales = orders.Sum(o => o.TotalPrice),
+            };
+
+
+            var grouped = orders.GroupBy(o => o.CreatedAt.Date)
+                                .OrderBy(g => g.Key)
+                                .Select(g => new {
+                                    Date = g.Key.ToString("yyyy-MM-dd"),
+                                    Count = g.Count()
+                                }).ToList();
+
+            foreach (var g in grouped)
+            {
+                model.OrderDates.Add(g.Date);
+                model.OrdersPerDay.Add(g.Count);
+            }
+
+            return Result<DashboardDto>.Success("آمار داشبورد بارگذاری شد.", model);
         }
     }
 }

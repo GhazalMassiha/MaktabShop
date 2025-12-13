@@ -9,5 +9,8 @@ namespace Core_MaktabShop.Domain.Core.ProductAgg.Contracts.RepositoryContract
         Task<List<ProductDto>> GetAll(CancellationToken cancellationToken);
         Task<int> GetProductStockById(int productId, CancellationToken cancellationToken);
         Task<bool> UpdateProductStock(int productId, int newStockNum, CancellationToken cancellationToken);
+        Task<bool> AddProduct(ProductCreateDto dto, CancellationToken cancellationToken);
+        Task<bool> UpdateProduct(int id, ProductCreateDto dto, CancellationToken cancellationToken);
+        Task<bool> DeleteProduct(int id, CancellationToken cancellationToken);
     }
 }

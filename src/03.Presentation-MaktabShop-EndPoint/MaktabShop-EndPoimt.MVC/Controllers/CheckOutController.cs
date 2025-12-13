@@ -1,4 +1,5 @@
-﻿using Core_MaktabShop.Domain.Core.OrderAgg.Contracts.AppServiceContract;
+﻿using AppService_MaktabShop.Domain.AppService.AppServices;
+using Core_MaktabShop.Domain.Core.OrderAgg.Contracts.AppServiceContract;
 using Core_MaktabShop.Domain.Core.OrderAgg.DTOs;
 using Core_MaktabShop.Domain.Core.OrderItemAgg.DTOs;
 using Core_MaktabShop.Domain.Core.ProductAgg.Contracts.AppServiceContract;
@@ -11,7 +12,7 @@ using System.Text.Json;
 namespace MaktabShop_EndPoimt.MVC.Controllers
 {
     public class CheckoutController(IUserAppService userAppService, IOrderAppService orderAppService,
-        IProductAppService productAppService) : Controller
+        ILogger<CheckoutController> logger) : Controller
     {
 
         private const string SessionCartKey = "CartSession";
@@ -32,23 +33,30 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
+            logger.LogInformation("نمایش صفحه تسویه حساب");
+
             var cart = GetCartFromSession();
             if (cart.Items == null || !cart.Items.Any())
             {
+                logger.LogWarning("سبد خرید خالی است و به صفحه سفارش هدایت شد");
                 return RedirectToAction("Index", "Order");
             }
 
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
             {
+                logger.LogWarning("کاربر لاگین نکرده و به صفحه ورود هدایت شد");
                 return RedirectToAction("Login", "Account");
             }
 
             var walletRes = await userAppService.GetUserWalletBalance(userId.Value, CancellationToken.None);
             if (!walletRes.IsSuccess)
             {
+                logger.LogError("خطا در دریافت موجودی کیف پول برای کاربر {UserId}", userId);
                 return View("Error");
             }
+
+            logger.LogInformation("کیف پول کاربر {UserId} بازیابی شد: {Balance}", userId, walletRes.Data);
 
             var vm = new CheckoutViewModel
             {
@@ -61,12 +69,19 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Confirm()
         {
-            var cart = GetCartFromSession();
             var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
-                return RedirectToAction("Login", "Account");
+            logger.LogInformation("کاربر {UserId} درخواست نهایی کردن سفارش را ارسال کرد", userId);
 
+            if (userId == null)
+            {
+                logger.LogWarning("کاربر ناشناس در تلاش برای نهایی کردن سفارش");
+                return RedirectToAction("Login", "Account");
+            }
+
+            var cart = GetCartFromSession();
             decimal total = cart.Total;
+            logger.LogInformation("جمع کل سفارش کاربر {UserId} معادل {Total}", userId, total);
+
             var orderDto = new OrderCreateDto
             {
                 UserId = userId.Value,
@@ -80,12 +95,14 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
                 }).ToList()
             };
 
-
             var res = await orderAppService.Create(orderDto, CancellationToken.None);
             if (!res.IsSuccess)
             {
+                logger.LogError("خطا در ثبت سفارش برای کاربر {UserId}: {Message}", userId, res.Message);
                 return View("Error");
             }
+
+            logger.LogInformation("سفارش کاربر {UserId} با موفقیت ثبت شد", userId);
 
             ClearCartSession();
             return RedirectToAction("Success");
@@ -93,6 +110,7 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
 
         public IActionResult Success()
         {
+            logger.LogInformation("صفحه موفقیت ثبت سفارش نمایش داده شد");
             return View();
         }
     }

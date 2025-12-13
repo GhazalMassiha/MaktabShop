@@ -1,0 +1,40 @@
+﻿@model List<MaktabShop_EndPoimt.MVC.Models.ProductAdminViewModel>
+
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewData["Title"] = "مدیریت محصولات";
+}
+
+<h2>مدیریت محصولات</h2>
+
+<a asp-action="Create" class="btn btn-success mb-2">ایجاد محصول جدید</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>نام</th>
+            <th>دسته</th>
+            <th>قیمت</th>
+            <th>موجودی</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Name</td>
+                <td>@p.CategoryName</td>
+                <td>@p.Price.ToString("N0")</td>
+                <td>@p.Stock</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-primary btn-sm">ویرایش</a>
+                    <form asp-action="Delete" asp-route-id="@p.Id"
+                          method="post" style="display:inline">
+                        <button type="submit" class="btn btn-danger btn-sm">حذف</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,27 @@
+﻿@model List<MaktabShop_EndPoimt.MVC.Models.OrderAdminViewModel>
+
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewData["Title"] = "لیست سفارش‌ها";
+}
+
+<h2>لیست سفارش‌ها</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr><th>شناسه</th><th>کاربر</th><th>جمع مبلغ</th><th>عملیات</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>@o.Id</td>
+                <td>@o.UserId</td>
+                <td>@o.TotalPrice.ToString("N0")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@o.Id" class="btn btn-info btn-sm">جزئیات</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

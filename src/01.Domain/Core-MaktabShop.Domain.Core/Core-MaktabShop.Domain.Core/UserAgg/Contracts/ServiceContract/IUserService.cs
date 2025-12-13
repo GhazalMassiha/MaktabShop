@@ -4,6 +4,9 @@ namespace Core_MaktabShop.Domain.Core.UserAgg.Contracts.ServiceContract
 {
     public interface IUserService
     {
+        Task<List<UserInfoForAdminDto>> GetAll(CancellationToken cancellationToken);
+        Task<UserInfoForAdminDto?> GetById(int id, CancellationToken cancellationToken);
+        Task<UserInfoForAdminDto?> GetByUsernameForAdmin(string username, CancellationToken cancellationToken);
         Task<UserLoginDto?> Login(string username, string password, CancellationToken cancellationToken);
         Task<bool> Register(UserCreateDto userCreateDto, CancellationToken cancellationToken);
         Task<UserDto?> GetByUsername(string username, CancellationToken cancellationToken);

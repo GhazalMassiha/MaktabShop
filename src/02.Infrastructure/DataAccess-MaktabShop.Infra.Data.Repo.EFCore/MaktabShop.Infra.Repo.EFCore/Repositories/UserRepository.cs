@@ -8,6 +8,61 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
 {
     public class UserRepository(AppDbContext _context) : IUserRepository
     {
+        public async Task<List<UserInfoForAdminDto>> GetAll(CancellationToken cancellationToken)
+        {
+            return await _context.Users
+                .AsNoTracking()
+                .Select(u => new UserInfoForAdminDto()
+                {
+                    Username = u.Username,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Address = u.Address,
+                    Phone = u.Phone,
+                    Wallet = u.Wallet
+                })
+                .ToListAsync();
+        }
+
+
+        public async Task<UserInfoForAdminDto?> GetById(int id, CancellationToken cancellationToken)
+        {
+            return await _context.Users
+                .AsNoTracking()
+                .Where(u => u.Id == id)
+                .Select(u => new UserInfoForAdminDto
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Address = u.Address,
+                    Phone = u.Phone,
+                    Wallet = u.Wallet
+                })
+                .FirstOrDefaultAsync();
+        }
+
+
+        public async Task<UserInfoForAdminDto?> GetByUsernameForAdmin(string username, CancellationToken cancellationToken)
+        {
+            return await _context.Users
+                .AsNoTracking()
+                .Where(u => u.Username == username)
+                .Select(u => new UserInfoForAdminDto
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Address = u.Address,
+                    Phone = u.Phone,
+                    Wallet = u.Wallet
+                })
+                .FirstOrDefaultAsync();
+        }
+
+
         public async Task<UserLoginDto?> Login(string username, string password, CancellationToken cancellationToken)
         {
             return _context.Users
@@ -16,7 +71,8 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
                 .Select(u => new UserLoginDto
                 {
                     Id = u.Id,
-                    Username = u.Username
+                    Username = u.Username,
+                    Role = u.Role
 
                 })
                 .FirstOrDefault();

@@ -1,4 +1,4 @@
-using AppService_MaktabShop.Domain.AppService.AppServices;
+﻿using AppService_MaktabShop.Domain.AppService.AppServices;
 using Core_MaktabShop.Domain.Core.CategoryAgg.Contracts.AppServiceContract;
 using Core_MaktabShop.Domain.Core.CategoryAgg.Contracts.RepositoryContract;
 using Core_MaktabShop.Domain.Core.CategoryAgg.Contracts.ServiceContract;
@@ -16,10 +16,19 @@ using Core_MaktabShop.Domain.Core.UserAgg.Contracts.RepositoryContract;
 using Core_MaktabShop.Domain.Core.UserAgg.Contracts.ServiceContract;
 using MaktabShop.Infra.Repo.EFCore.Repositories;
 using MaktabShop.Infra.SqlServer.EFCore.Persistence;
+using MaktabShop_EndPoimt.MVC.Middlewares;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Service_MaktabShop.Domain.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+});
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -40,19 +49,17 @@ builder.Services.AddScoped<IUserAppService, UserAppService>();
 builder.Services.AddScoped<IOrderAppService, OrderAppService>();
 builder.Services.AddScoped<IOrderItemAppService, OrderItemAppService>();
 
+
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 
-
 builder.Services.AddControllersWithViews();
 
-// --- Session (for Cart / Login) ---
-builder.Services.AddHttpContextAccessor();
 
-// Session setup
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -62,9 +69,19 @@ builder.Services.AddSession(options =>
 });
 
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromHours(2);
+        options.SlidingExpiration = true;
+    });
+
+
 WebApplication app = builder.Build();
 
-// --- Middleware pipeline ---
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -74,12 +91,22 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+
+app.UseSerilogRequestLogging();
+
+
+app.UseMiddleware<RequestLoggingMiddleware>();
+
+
 app.UseRouting();
 
-// session must be before MVC endpoints
+
 app.UseSession();
 
-app.UseAuthorization();
+
+app.UseAuthentication(); 
+app.UseAuthorization();  
+
 
 app.MapControllerRoute(
     name: "default",

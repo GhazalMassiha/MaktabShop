@@ -1,0 +1,66 @@
+﻿@model MaktabShop_EndPoimt.MVC.Models.DashboardViewModel
+
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewData["Title"] = "داشبورد مدیریت";
+}
+
+<h2>داشبورد مدیریت</h2>
+
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <div class="card text-bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">محصولات</h5>
+                <p class="card-text">@Model.TotalProducts</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-bg-success">
+            <div class="card-body">
+                <h5 class="card-title">کاربران</h5>
+                <p class="card-text">@Model.TotalUsers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">سفارش‌ها</h5>
+                <p class="card-text">@Model.TotalOrders</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-bg-info">
+            <div class="card-body">
+                <h5 class="card-title">فروش کل</h5>
+                <p class="card-text">@Model.TotalSales.ToString("N0")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<h4>نمودار تعداد سفارش‌ها در روزها</h4>
+<canvas id="ordersChart"></canvas>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('ordersChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.OrderDates)),
+                datasets: [{
+                    label: 'تعداد سفارش',
+                    data: @Html.Raw(Json.Serialize(Model.OrdersPerDay)),
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                }]
+            }
+        });
+    </script>
+}

@@ -12,7 +12,7 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
             var orderItem = OrderItems.Select(o => new OrderItem
             {
                 ProductId = o.ProductId,
-                OrderId = o.OrderId.Value, 
+                OrderId = o.OrderId, 
                 Count = o.Count,
                 UnitPrice = o.UnitPrice
 

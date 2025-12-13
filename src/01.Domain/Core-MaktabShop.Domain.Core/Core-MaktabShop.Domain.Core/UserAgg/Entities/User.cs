@@ -1,5 +1,6 @@
 ﻿using Core_MaktabShop.Domain.Core._common;
 using Core_MaktabShop.Domain.Core.OrderAgg.Entities;
+using Core_MaktabShop.Domain.Core.UserAgg.Enums;
 
 namespace Core_MaktabShop.Domain.Core.UserAgg.Entities
 {
@@ -12,6 +13,7 @@ namespace Core_MaktabShop.Domain.Core.UserAgg.Entities
         public string Phone { get; set; }
         public string Address { get; set; }
         public decimal Wallet { get; set; }
+        public RoleEnum Role { get; set; }
 
         public List<Order>? Orders { get; set; }
     }

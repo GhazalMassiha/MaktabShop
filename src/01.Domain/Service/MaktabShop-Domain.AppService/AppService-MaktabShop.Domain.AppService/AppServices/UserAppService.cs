@@ -2,6 +2,7 @@
 using Core_MaktabShop.Domain.Core.UserAgg.Contracts.AppServiceContract;
 using Core_MaktabShop.Domain.Core.UserAgg.Contracts.ServiceContract;
 using Core_MaktabShop.Domain.Core.UserAgg.DTOs;
+using Service_MaktabShop.Domain.Service.Services;
 
 namespace AppService_MaktabShop.Domain.AppService.AppServices
 {
@@ -68,6 +69,21 @@ namespace AppService_MaktabShop.Domain.AppService.AppServices
                 return Result<bool>.Failure("خطا در عملیات کیف پول.");
 
             return Result<bool>.Success("عملیات کیف پول با موفقیت انجام شد.", true);
+        }
+
+        public async Task<Result<List<UserInfoForAdminDto>>> GetAll(CancellationToken cancellationToken)
+        {
+            var users = await userService.GetAll(cancellationToken);
+            return Result<List<UserInfoForAdminDto>>.Success("کاربران با موفقیت بازیابی شدند.", users);
+        }
+
+        public async Task<Result<UserInfoForAdminDto?>> GetById(int id, CancellationToken cancellationToken)
+        {
+            var user = await userService.GetById(id, cancellationToken);
+            if (user == null)
+                return Result<UserInfoForAdminDto?>.Failure("کاربر یافت نشد.");
+
+            return Result<UserInfoForAdminDto?>.Success("کاربر بازیابی شد.", user);
         }
     }
 }

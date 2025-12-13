@@ -1,0 +1,28 @@
+﻿@model List<MaktabShop_EndPoimt.MVC.Models.CategoryAdminViewModel>
+
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewData["Title"] = "مدیریت دسته‌ها";
+}
+
+<h2>مدیریت دسته‌ها</h2>
+
+<a asp-action="Create" class="btn btn-success mb-2">ایجاد دسته جدید</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr><th>نام</th><th>عملیات</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var cat in Model)
+        {
+            <tr>
+                <td>@cat.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@cat.Id" class="btn btn-primary btn-sm">ویرایش</a>
+                    <a asp-action="Delete" asp-route-id="@cat.Id" class="btn btn-danger btn-sm">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

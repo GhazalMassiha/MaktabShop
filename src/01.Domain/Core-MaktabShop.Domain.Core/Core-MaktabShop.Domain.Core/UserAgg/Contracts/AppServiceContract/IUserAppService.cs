@@ -9,5 +9,7 @@ namespace Core_MaktabShop.Domain.Core.UserAgg.Contracts.AppServiceContract
         Task<Result<bool>> Register(UserCreateDto userCreateDto, CancellationToken cancellationToken);
         Task<Result<decimal>> GetUserWalletBalance(int userId, CancellationToken cancellationToken);
         Task<Result<bool>> UpdateUserWallet(int userId, decimal itemPrice, CancellationToken cancellationToken);
+        Task<Result<List<UserInfoForAdminDto>>> GetAll(CancellationToken cancellationToken);
+        Task<Result<UserInfoForAdminDto?>> GetById(int id, CancellationToken cancellationToken);
     }
 }

@@ -6,6 +6,16 @@ namespace Service_MaktabShop.Domain.Service.Services
 {
     public class ProductService(IProductRepository productRepository) : IProductService
     {
+        public async Task<bool> AddProduct(ProductCreateDto dto, CancellationToken cancellationToken)
+        {
+            return await productRepository.AddProduct(dto, cancellationToken);
+        }
+
+        public async Task<bool> DeleteProduct(int id, CancellationToken cancellationToken)
+        {
+            return await productRepository.DeleteProduct(id, cancellationToken);
+        }
+
         public async Task<List<ProductDto>> GetAll(CancellationToken cancellationToken)
         {
             return await productRepository.GetAll(cancellationToken);
@@ -24,6 +34,11 @@ namespace Service_MaktabShop.Domain.Service.Services
         public async Task<int> GetProductStockById(int productId, CancellationToken cancellationToken)
         {
             return await productRepository.GetProductStockById(productId, cancellationToken);
+        }
+
+        public async Task<bool> UpdateProduct(int id, ProductCreateDto dto, CancellationToken cancellationToken)
+        {
+           return await productRepository.UpdateProduct(id, dto, cancellationToken);
         }
 
         public async Task<bool> UpdateProductStock(int productId, int newStockNum, CancellationToken cancellationToken)

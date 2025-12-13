@@ -1,0 +1,15 @@
+﻿@model MaktabShop_EndPoimt.MVC.Models.UserAdminViewModel
+
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewData["Title"] = "جزئیات کاربر";
+}
+
+<h2>جزئیات کاربر</h2>
+
+<table class="table table-bordered">
+    <tr><th>نام کاربری</th><td>@Model.Username</td></tr>
+    <tr><th>نام</th><td>@Model.FirstName</td></tr>
+    <tr><th>نام خانوادگی</th><td>@Model.LastName</td></tr>
+    <tr><th>کیف پول</th><td>@Model.Wallet.ToString("N0")</td></tr>
+</table>

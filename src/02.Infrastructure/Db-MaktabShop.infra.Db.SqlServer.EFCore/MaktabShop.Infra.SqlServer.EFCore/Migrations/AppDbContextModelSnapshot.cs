@@ -309,6 +309,10 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UptatedAt")
                         .HasColumnType("datetime2");
 
@@ -334,6 +338,7 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Migrations
                             LastName = "مسیحا",
                             PasswordHash = "123456",
                             Phone = "09123456789",
+                            Role = "NormaUser",
                             Username = "ghazal",
                             Wallet = 10000000m
                         },
@@ -346,6 +351,7 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Migrations
                             LastName = "کسروی",
                             PasswordHash = "123456",
                             Phone = "09111223344",
+                            Role = "NormaUser",
                             Username = "mersedeh",
                             Wallet = 7000000m
                         },
@@ -358,8 +364,22 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Migrations
                             LastName = "ساعدی نیا",
                             PasswordHash = "123456",
                             Phone = "09111223343",
+                            Role = "NormaUser",
                             Username = "amir",
                             Wallet = 5000000m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "تهران",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "ادمین",
+                            LastName = "1",
+                            PasswordHash = "123456",
+                            Phone = "09111223342",
+                            Role = "Admin",
+                            Username = "admin",
+                            Wallet = 100000000m
                         });
                 });
 

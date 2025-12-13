@@ -1,0 +1,17 @@
+﻿@model Core_MaktabShop.Domain.Core.CategoryAgg.DTOs.CategoryCreateDto
+
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewData["Title"] = "ایجاد دسته‌بندی";
+}
+
+<h2>ایجاد دسته‌بندی جدید</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label>نام</label>
+        <input asp-for="Name" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">ثبت</button>
+</form>

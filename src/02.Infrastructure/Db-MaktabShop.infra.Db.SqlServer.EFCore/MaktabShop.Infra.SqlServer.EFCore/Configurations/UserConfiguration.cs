@@ -38,6 +38,11 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
             builder.Property(u => u.Wallet)
                 .HasColumnType("decimal(18,2)");
 
+
+            builder.Property(u => u.Role)
+                      .HasConversion<string>()
+                      .IsRequired();
+
             builder.Property(u => u.CreatedAt)
                 .HasDefaultValueSql("GetDate()")
                 .ValueGeneratedOnAdd();
@@ -58,6 +63,7 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
                      Phone = "09123456789",
                      Address = "تهران، شهرک غرب",
                      Wallet = 10000000M,
+                     Role = Core_MaktabShop.Domain.Core.UserAgg.Enums.RoleEnum.NormaUser
                  },
                 new User
                 {
@@ -69,6 +75,7 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
                     Phone = "09111223344",
                     Address = "رشت، گلسار",
                     Wallet = 7000000,
+                    Role = Core_MaktabShop.Domain.Core.UserAgg.Enums.RoleEnum.NormaUser
                 },
                 new User
                 {
@@ -80,6 +87,19 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
                     Phone = "09111223343",
                     Address = "تهران، پونک",
                     Wallet = 5000000M,
+                    Role = Core_MaktabShop.Domain.Core.UserAgg.Enums.RoleEnum.NormaUser
+                },
+                new User
+                {
+                    Id = 4,
+                    Username = "admin",
+                    PasswordHash = "123456",
+                    FirstName = "ادمین",
+                    LastName = "1",
+                    Phone = "09111223342",
+                    Address = "تهران",
+                    Wallet = 100000000M,
+                    Role = Core_MaktabShop.Domain.Core.UserAgg.Enums.RoleEnum.Admin
                 }
                 );
 

@@ -1,5 +1,8 @@
 ﻿using Core_MaktabShop.Domain.Core.CategoryAgg.Contracts.RepositoryContract;
 using Core_MaktabShop.Domain.Core.CategoryAgg.DTOs;
+using Core_MaktabShop.Domain.Core.CategoryAgg.Entities;
+using Core_MaktabShop.Domain.Core.UserAgg.DTOs;
+using Core_MaktabShop.Domain.Core.UserAgg.Entities;
 using MaktabShop.Infra.SqlServer.EFCore.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +31,38 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
                 Name = c.Name
 
             }).ToListAsync(cancellationToken);
+        }
+
+
+        public async Task<bool> Create (CategoryCreateDto categoryCreateDto, CancellationToken cancellationToken)
+        {
+            var category = new Category
+            {
+                Name = categoryCreateDto.Name,
+            };
+
+            await _context.Categories.AddAsync(category);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+
+        public async Task<bool> Update (int categoryId, CategoryCreateDto categoryCreateDto, CancellationToken cancellationToken)
+        {
+            var affectedRows = _context.Categories
+                .Where(c => c.Id == categoryId)
+                .ExecuteUpdateAsync(setter => setter
+                    .SetProperty(c => c.Name, categoryCreateDto.Name)
+                );
+
+            return await affectedRows > 0;
+        }
+
+
+        public async Task<bool> Delete (int categoryId, CancellationToken cancellationToken)
+        {
+            var result = _context.Categories.Where(c => c.Id == categoryId).ExecuteDeleteAsync();
+
+            return await result > 0;
         }
     }
 }

@@ -1,0 +1,25 @@
+﻿@model List<MaktabShop_EndPoimt.MVC.Models.UserAdminViewModel>
+
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewData["Title"] = "لیست کاربران";
+}
+
+<h2>لیست کاربران</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr><th>نام کاربری</th><th>نام</th><th>نام خانوادگی</th><th>کیف پول</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Username</td>
+                <td>@u.FirstName</td>
+                <td>@u.LastName</td>
+                <td>@u.Wallet.ToString("N0")</td>
+            </tr>
+        }
+    </tbody>
+</table>

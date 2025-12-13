@@ -30,5 +30,20 @@ namespace Service_MaktabShop.Domain.Service.Services
         {
             return await userRepository.UpdateUserWallet(userId, newAmount, cancellationToken);
         }
+
+        public async Task<List<UserInfoForAdminDto>> GetAll(CancellationToken cancellationToken)
+        {
+            return await userRepository.GetAll(cancellationToken);
+        }
+
+        public async Task<UserInfoForAdminDto?> GetById(int id, CancellationToken cancellationToken)
+        {
+            return await userRepository.GetById(id, cancellationToken);
+        }
+
+        public async Task<UserInfoForAdminDto?> GetByUsernameForAdmin(string username, CancellationToken cancellationToken)
+        {
+            return await userRepository.GetByUsernameForAdmin(username, cancellationToken);
+        }
     }
 }
