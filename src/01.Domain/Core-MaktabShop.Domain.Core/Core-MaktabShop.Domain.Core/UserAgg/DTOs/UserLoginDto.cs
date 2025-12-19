@@ -6,6 +6,6 @@ namespace Core_MaktabShop.Domain.Core.UserAgg.DTOs
     {
         public int Id { get; set; }
         public string Username { get; set; }
-        public RoleEnum Role { get; set; }
+        //public RoleEnum Role { get; set; }
     }
 }

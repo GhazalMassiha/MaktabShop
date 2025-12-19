@@ -1,17 +1,20 @@
 ﻿using AppService_MaktabShop.Domain.AppService.AppServices;
 using Core_MaktabShop.Domain.Core.UserAgg.Contracts.AppServiceContract;
+using Core_MaktabShop.Domain.Core.UserAgg.Entities;
 using Core_MaktabShop.Domain.Core.UserAgg.Enums;
 using MaktabShop_EndPoimt.MVC.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading;
 
 namespace MaktabShop_EndPoimt.MVC.Controllers
 {
-    public class AccountController(IUserAppService userAppService, ILogger<AccountController> logger) : Controller
+    public class AccountController(IUserAppService userAppService, ILogger<AccountController> logger,
+                SignInManager<AppUser> signInManager, UserManager<AppUser> userManager) : Controller
     {
 
         [HttpGet]
@@ -32,26 +35,30 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
                 return View(vm);
             }
 
-            var dto = new Core_MaktabShop.Domain.Core.UserAgg.DTOs.UserCreateDto
+            var user = new AppUser
             {
-                Username = vm.Username,
+                UserName = vm.Username,
                 PasswordHash = vm.Password,
                 FirstName = vm.FirstName,
                 LastName = vm.LastName,
-                Phone = vm.Phone,
+                PhoneNumber = vm.Phone,
                 Address = vm.Address
             };
 
-            var res = await userAppService.Register(dto, CancellationToken.None);
-            if (!res.IsSuccess)
-            {
-                logger.LogWarning("ثبت‌نام {Username} با خطا روبرو شد: {Message}", vm.Username, res.Message);
+            var res = await userManager.CreateAsync(user, vm.Password);
 
-                ModelState.AddModelError("", res.Message);
+            if (!res.Succeeded)
+            {
+                logger.LogWarning("ثبت‌نام {Username} با خطا روبرو شد", vm.Username);
+
+                foreach (var error in res.Errors)
+                    ModelState.AddModelError("", error.Description);
+
                 return View(vm);
             }
 
             logger.LogInformation("کاربر {Username} با موفقیت ثبت‌نام کرد", vm.Username);
+            await signInManager.SignInAsync(user, isPersistent: false);
             return RedirectToAction("Login");
         }
 
@@ -73,51 +80,62 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
                 return View(vm);
             }
 
-            var res = await userAppService.Login(vm.Username, vm.Password, CancellationToken.None);
+            var res = await signInManager.PasswordSignInAsync(vm.Username, vm.Password, isPersistent: true, lockoutOnFailure: false);
 
-            if (!res.IsSuccess || res.Data == null)
+            if (!res.Succeeded)
             {
-                logger.LogWarning("ورود ناموفق برای {Username}: {Message}", vm.Username, res.Message);
-                ModelState.AddModelError("", res.Message);
+                logger.LogWarning("ورود ناموفق برای {Username}", vm.Username);
+                ModelState.AddModelError("", "نام کاربری یا رمز اشتباه است");
                 return View(vm);
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, res.Data.Username),
-                new Claim(ClaimTypes.NameIdentifier, res.Data.Id.ToString()),
-                new Claim(ClaimTypes.Role, res.Data.Role.ToString()) 
-            };
+            //var claims = new List<Claim>
+            //{
+            //    new Claim(ClaimTypes.Name, res.Data.Username),
+            //    new Claim(ClaimTypes.NameIdentifier, res.Data.Id.ToString()),
+            //    new Claim(ClaimTypes.Role, res.Data.Role.ToString())
+            //};
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
+            //var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //var principal = new ClaimsPrincipal(identity);
 
-        
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                principal,
-                new AuthenticationProperties { IsPersistent = true }
-            );
 
-            logger.LogInformation("کاربر {Username} با موفقیت وارد شد با نقش {Role}", vm.Username, res.Data.Role);
+            //await HttpContext.SignInAsync(
+            //    CookieAuthenticationDefaults.AuthenticationScheme,
+            //    principal,
+            //    new AuthenticationProperties { IsPersistent = true }
+            //);
 
-   
-            if (res.Data.Role == RoleEnum.Admin)
+
+            //if (res.Data.Role == RoleEnum.Admin)
+            //{
+            //    logger.LogInformation("ادمین وارد شد، هدایت به پنل مدیریت");
+            //    return RedirectToAction("Index", "AdminDashboard");
+            //}
+
+            var user = await userManager.FindByNameAsync(vm.Username);
+
+            if (user != null && await userManager.IsInRoleAsync(user, RoleEnum.Admin.ToString()))
             {
                 logger.LogInformation("ادمین وارد شد، هدایت به پنل مدیریت");
                 return RedirectToAction("Index", "AdminDashboard");
             }
 
+            logger.LogInformation("کاربر {Username} با موفقیت وارد شد", vm.Username);
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            var username = HttpContext.Session.GetString("Username");
-            logger.LogInformation("کاربر {Username} از سیستم خارج شد", username);
+            //var username = HttpContext.Session.GetString("Username");
+            //logger.LogInformation("کاربر {Username} از سیستم خارج شد", username);
 
-            HttpContext.Session.Clear();
+            //HttpContext.Session.Clear();
+
+            await signInManager.SignOutAsync();
+
+            logger.LogInformation("کاربر {Username} از سیستم خارج شد");
             return RedirectToAction("Index", "Home");
         }
 

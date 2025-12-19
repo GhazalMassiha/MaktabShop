@@ -63,7 +63,8 @@ namespace AppService_MaktabShop.Domain.AppService.AppServices
                     ProductId = i.ProductId,
                     Count = i.Count,
                     UnitPrice = i.UnitPrice,
-                    TotalPrice = i.Count * i.UnitPrice
+                    TotalPrice = i.Count * i.UnitPrice,
+                    CreatedAt = DateTime.Now
                 })
                 .ToList();
 
@@ -100,12 +101,18 @@ namespace AppService_MaktabShop.Domain.AppService.AppServices
             };
 
 
-            var grouped = orders.GroupBy(o => o.CreatedAt.Date)
-                                .OrderBy(g => g.Key)
-                                .Select(g => new {
-                                    Date = g.Key.ToString("yyyy-MM-dd"),
-                                    Count = g.Count()
-                                }).ToList();
+            var filteredOrders = orders
+                .Where(o => o.CreatedAt > DateTime.MinValue)
+                .ToList();
+
+            var grouped = filteredOrders
+                .GroupBy(o => o.CreatedAt.Date)
+                .OrderBy(g => g.Key)
+                .Select(g => new {
+                    Date = g.Key.ToString("yyyy-MM-dd"),
+                    Count = g.Count()
+                })
+                .ToList();
 
             foreach (var g in grouped)
             {

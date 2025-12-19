@@ -11,5 +11,6 @@ namespace Core_MaktabShop.Domain.Core.UserAgg.Contracts.AppServiceContract
         Task<Result<bool>> UpdateUserWallet(int userId, decimal itemPrice, CancellationToken cancellationToken);
         Task<Result<List<UserInfoForAdminDto>>> GetAll(CancellationToken cancellationToken);
         Task<Result<UserInfoForAdminDto?>> GetById(int id, CancellationToken cancellationToken);
+        Task<Result<bool>> Update(int userId, UserEditDto dto, CancellationToken cancellationToken);
     }
 }

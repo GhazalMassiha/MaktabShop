@@ -1,6 +1,4 @@
-﻿/* ─────────────────── site.css ─────────────────── */
-
-/* Reset & base styles */
+﻿/* ─── Reset Base Styles ───────────────── */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -8,68 +6,60 @@
 }
 
 html, body {
-    direction: rtl; /* for Persian RTL layout */
+    direction: rtl;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: #fff;
     color: #111;
-    line-height: 1.5;
+    line-height: 1.6;
     font-size: 16px;
 }
 
+/* Anchor reset */
 a {
     text-decoration: none;
     color: inherit;
 }
 
+/* Images */
 img {
     display: block;
     max-width: 100%;
     height: auto;
 }
 
-/* Container helper */
+/* Utility */
 .container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
-/* Header / Nav */
+/* ─── Header/Nav ───────────────── */
 header {
-    padding: 24px 0;
+    background-color: #fff;
 }
 
     header .logo a {
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         font-weight: 700;
-        color: #000;
     }
 
-    header nav {
-        margin-top: 8px;
+    /* Nav links */
+    header nav .nav-link {
+        font-size: 0.95rem;
+        font-weight: 500;
     }
 
-        header nav a {
-            margin-left: 24px;
-            font-size: 0.9rem;
-            font-weight: 400;
-            text-transform: uppercase;
-            color: #000;
-            transition: color 0.2s ease-in-out;
+        /* Hover */
+        header nav .nav-link:hover {
+            color: #0d6efd;
         }
 
-            header nav a:hover {
-                color: #555;
-            }
-
-/* Products grid (home / category lists) */
+/* ─── Products Grid ───────────────── */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 32px;
-    margin: 32px 0;
+    margin: 24px 0;
 }
 
 .product-card {
@@ -78,179 +68,34 @@ header {
     text-align: center;
     background-color: #fff;
     overflow: hidden;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    transition: 0.3s;
 }
 
-    .product-card img {
-        width: 100%;
-        height: 360px; /* fixed height to standardize cards */
-        object-fit: cover;
+    .product-card:hover {
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     .product-card .info {
         padding: 16px 8px;
     }
 
-        .product-card .info h3 {
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: #111;
-        }
-
-    .product-card .price {
-        font-size: 0.95rem;
-        font-weight: 400;
-        color: #111;
-        margin-bottom: 12px;
-    }
-
-    .product-card .btn {
-        display: inline-block;
-        padding: 10px 16px;
-        background-color: #000;
-        color: #fff;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        transition: background-color 0.2s ease-in-out;
-    }
-
-        .product-card .btn:hover {
-            background-color: #333;
-        }
-
-/* Product details page — layout & full-width / half-width */
-.product-detail {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 40px 0;
-}
-
-    .product-detail img {
-        flex: 1 1 500px;
-        width: 100%;
-        max-width: 600px;
-        object-fit: cover;
-    }
-
-.detail-info {
-    flex: 1 1 400px;
-    padding: 24px;
-}
-
-    .detail-info h2 {
-        font-size: 1.6rem;
-        margin-bottom: 16px;
-        font-weight: 600;
-        color: #000;
-    }
-
-    .detail-info p {
-        font-size: 0.95rem;
-        color: #333;
-        margin-bottom: 16px;
-    }
-
-    .detail-info .price {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #000;
-        margin-bottom: 24px;
-    }
-
-    .detail-info form input[type="number"] {
-        width: 80px;
-        padding: 6px 8px;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        margin-left: 8px;
-    }
-
-    .detail-info form button {
-        padding: 10px 18px;
-        background-color: #000;
-        color: #fff;
-        font-size: 0.9rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
-    }
-
-        .detail-info form button:hover {
-            background-color: #333;
-        }
-
-/* Cart / Order page */
-.cart-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 24px 0;
-}
-
-    .cart-table th,
-    .cart-table td {
-        padding: 12px 8px;
-        border-bottom: 1px solid #eee;
-        text-align: center;
-        font-size: 0.95rem;
-        color: #111;
-    }
-
-.cart-total {
-    text-align: right;
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 16px 0;
-}
-
-/* Generic button class */
+/* Button override */
 .btn {
-    display: inline-block;
-    padding: 10px 18px;
-    background-color: #000;
-    color: #fff;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    min-width: 140px;
 }
 
-    .btn:hover {
-        background-color: #333;
-    }
+/* Tables */
+.table th, .table td {
+    font-size: 0.95rem;
+}
 
 /* Footer */
 footer {
     margin-top: 64px;
-    padding: 24px 0;
-    text-align: center;
     font-size: 0.85rem;
     color: #777;
 }
 
-/* Responsive / mobile tweaks */
-@media (max-width: 992px) {
-    .product-detail {
-        flex-direction: column;
-        padding: 0;
-    }
-
-        .product-detail img,
-        .detail-info {
-            max-width: 100%;
-        }
-
-    header nav a {
-        margin-left: 16px;
-    }
-
-    .products-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-}
+✔ این CSS با Bootstrap ترکیب شده و ظاهر کلی سایت

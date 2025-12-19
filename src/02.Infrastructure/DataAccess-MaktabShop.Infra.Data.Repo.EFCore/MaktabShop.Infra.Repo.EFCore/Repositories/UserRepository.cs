@@ -14,11 +14,11 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
                 .AsNoTracking()
                 .Select(u => new UserInfoForAdminDto()
                 {
-                    Username = u.Username,
+                    Username = u.UserName,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Address = u.Address,
-                    Phone = u.Phone,
+                    Phone = u.PhoneNumber,
                     Wallet = u.Wallet
                 })
                 .ToListAsync();
@@ -33,11 +33,11 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
                 .Select(u => new UserInfoForAdminDto
                 {
                     Id = u.Id,
-                    Username = u.Username,
+                    Username = u.UserName,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Address = u.Address,
-                    Phone = u.Phone,
+                    Phone = u.PhoneNumber,
                     Wallet = u.Wallet
                 })
                 .FirstOrDefaultAsync();
@@ -48,15 +48,15 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
         {
             return await _context.Users
                 .AsNoTracking()
-                .Where(u => u.Username == username)
+                .Where(u => u.UserName == username)
                 .Select(u => new UserInfoForAdminDto
                 {
                     Id = u.Id,
-                    Username = u.Username,
+                    Username = u.UserName,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Address = u.Address,
-                    Phone = u.Phone,
+                    Phone = u.PhoneNumber,
                     Wallet = u.Wallet
                 })
                 .FirstOrDefaultAsync();
@@ -67,12 +67,12 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
         {
             return _context.Users
                 .AsNoTracking()
-                .Where(u => u.Username == username && u.PasswordHash == password)
+                .Where(u => u.UserName == username && u.PasswordHash == password)
                 .Select(u => new UserLoginDto
                 {
                     Id = u.Id,
-                    Username = u.Username,
-                    Role = u.Role
+                    Username = u.UserName,
+                    //Role = u.Role
 
                 })
                 .FirstOrDefault();
@@ -80,13 +80,13 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
 
         public async Task<bool> Register(UserCreateDto userCreateDto, CancellationToken cancellationToken)
         {
-            var user = new User
+            var user = new AppUser
             {
-                Username = userCreateDto.Username,
+                UserName = userCreateDto.Username,
                 PasswordHash = userCreateDto.PasswordHash,
                 FirstName = userCreateDto.FirstName,
                 LastName = userCreateDto.LastName,
-                Phone = userCreateDto.Phone,
+                PhoneNumber = userCreateDto.Phone,
                 Address = userCreateDto.Address
 
             };
@@ -98,10 +98,10 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
         public async Task<UserDto?> GetByUsername(string username, CancellationToken cancellationToken)
         {
             return await _context.Users
-               .Where(a => a.Username == username)
+               .Where(a => a.UserName == username)
                .Select(a => new UserDto
                {
-                   Username = a.Username
+                   Username = a.UserName
                })
                .FirstOrDefaultAsync();
         }
@@ -121,6 +121,25 @@ namespace MaktabShop.Infra.Repo.EFCore.Repositories
                 .ExecuteUpdateAsync(w => w.SetProperty
                 (w => w.Wallet, newAmount), cancellationToken) > 0;
 
+        }
+
+
+        public async Task<bool> Update(int userId, UserEditDto dto, CancellationToken cancellationToken)
+        {
+            var affectedRows = _context.Users
+                .Where(u => u.Id == userId)
+                .ExecuteUpdateAsync(setter => setter
+                .SetProperty(u => u.UserName, dto.UserName)
+                .SetProperty(u => u.PasswordHash, dto.Password)
+                .SetProperty(u => u.FirstName, dto.FirstName)
+                .SetProperty(u => u.LastName, dto.LastName)
+                .SetProperty(u => u.PhoneNumber, dto.PhoneNumber)
+                .SetProperty(u => u.Address, dto.Address)
+                .SetProperty(u => u.Wallet, dto.Wallet)
+                );
+
+
+            return await affectedRows > 0;
         }
     }
 }

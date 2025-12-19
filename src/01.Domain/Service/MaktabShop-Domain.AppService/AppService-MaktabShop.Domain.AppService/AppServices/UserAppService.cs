@@ -85,5 +85,23 @@ namespace AppService_MaktabShop.Domain.AppService.AppServices
 
             return Result<UserInfoForAdminDto?>.Success("کاربر بازیابی شد.", user);
         }
+
+        public async Task<Result<bool>> Update(int userId, UserEditDto dto, CancellationToken cancellationToken)
+        {
+            var existing = await userService.GetById(userId, cancellationToken);
+            if (existing == null)
+                return Result<bool>.Failure("کاربر یافت نشد.");
+
+            var other = await userService.GetByUsername(dto.UserName, cancellationToken);
+
+            if (other != null && other.Username != existing.Username)
+                return Result<bool>.Failure("این نام کاربری قبلاً ثبت شده است.");
+
+            bool ok = await userService.Update(userId, dto, cancellationToken);
+            if (!ok)
+                return Result<bool>.Failure("خطا در بروزرسانی اطلاعات کاربر.");
+
+            return Result<bool>.Success("اطلاعات کاربر با موفقیت بروزرسانی شد.", true);
+        }
     }
 }

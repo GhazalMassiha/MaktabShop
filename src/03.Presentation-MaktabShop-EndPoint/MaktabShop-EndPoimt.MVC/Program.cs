@@ -14,10 +14,12 @@ using Core_MaktabShop.Domain.Core.ProductAgg.Contracts.ServiceContract;
 using Core_MaktabShop.Domain.Core.UserAgg.Contracts.AppServiceContract;
 using Core_MaktabShop.Domain.Core.UserAgg.Contracts.RepositoryContract;
 using Core_MaktabShop.Domain.Core.UserAgg.Contracts.ServiceContract;
+using Core_MaktabShop.Domain.Core.UserAgg.Entities;
 using MaktabShop.Infra.Repo.EFCore.Repositories;
 using MaktabShop.Infra.SqlServer.EFCore.Persistence;
 using MaktabShop_EndPoimt.MVC.Middlewares;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Service_MaktabShop.Domain.Service.Services;
@@ -34,6 +36,29 @@ builder.Host.UseSerilog((context, configuration) =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedPhoneNumber = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+    options.User.RequireUniqueEmail = false;
+})
+.AddRoles<IdentityRole<int>>()
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
 
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();

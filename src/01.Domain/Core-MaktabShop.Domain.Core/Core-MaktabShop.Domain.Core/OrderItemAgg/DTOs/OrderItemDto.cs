@@ -11,5 +11,6 @@ namespace Core_MaktabShop.Domain.Core.OrderItemAgg.DTOs
         public decimal TotalPrice { get; set; }
         public int Count { get; set; }
         public string ProductImageUrl { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

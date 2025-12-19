@@ -1,5 +1,6 @@
 ﻿using Core_MaktabShop.Domain.Core.CategoryAgg.Contracts.AppServiceContract;
 using Core_MaktabShop.Domain.Core.CategoryAgg.DTOs;
+using MaktabShop_EndPoimt.MVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,14 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
                 logger.LogError("خطا در دریافت لیست دسته بندی ها برای پنل مدیریت");
                 return View("Error");
             }
+
+            var vm = res.Data
+             .Select(c => new CategoryAdminViewModel
+             {
+                 Id = c.Id,
+                 Name = c.Name
+
+             }).ToList();
 
             return View(res.Data);
         }
@@ -49,6 +58,9 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
         {
             logger.LogInformation("ادمین: باز کردن فرم ویرایش دسته‌بندی {CategoryId}", id);
             var res = await categoryAppService.GetById(id, CancellationToken.None);
+
+            if (!res.IsSuccess || res.Data == null)
+                return NotFound();
 
             return View(res.Data);
         }

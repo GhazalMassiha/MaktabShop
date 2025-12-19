@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\02.Infrastructure\DataAccess-MaktabShop.Infra.Data.Repo.EFCore\MaktabShop.Infra.Repo.EFCore\MaktabShop.Infra.Repo.EFCore.csproj" />
     <ProjectReference Include="..\..\..\Core-MaktabShop.Domain.Core\Core-MaktabShop.Domain.Core\Core-MaktabShop.Domain.Core.csproj" />
   </ItemGroup>

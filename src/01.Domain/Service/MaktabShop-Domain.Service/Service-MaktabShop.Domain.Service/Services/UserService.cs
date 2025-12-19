@@ -45,5 +45,10 @@ namespace Service_MaktabShop.Domain.Service.Services
         {
             return await userRepository.GetByUsernameForAdmin(username, cancellationToken);
         }
+
+        public async Task<bool> Update(int userId, UserEditDto dto, CancellationToken cancellationToken)
+        {
+            return await userRepository.Update(userId, dto, cancellationToken);
+        }
     }
 }

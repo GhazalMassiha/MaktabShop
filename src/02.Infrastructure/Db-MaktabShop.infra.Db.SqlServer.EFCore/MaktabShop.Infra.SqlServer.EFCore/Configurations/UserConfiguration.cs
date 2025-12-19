@@ -1,25 +1,26 @@
 ﻿using Core_MaktabShop.Domain.Core.UserAgg.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : IEntityTypeConfiguration<AppUser>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<AppUser> builder)
         {
             builder.ToTable("Users");
 
             builder.HasKey(t => t.Id);
 
-            builder.Property(u => u.Username)
+            builder.Property(u => u.UserName)
                 .IsRequired()
                 .HasMaxLength(100);
 
             builder.Property(u => u.PasswordHash)
                 .IsRequired();
 
-            builder.Property(u => u.Phone)
+            builder.Property(u => u.PhoneNumber)
                 .IsRequired()
                 .HasMaxLength(100);
 
@@ -39,9 +40,9 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
                 .HasColumnType("decimal(18,2)");
 
 
-            builder.Property(u => u.Role)
-                      .HasConversion<string>()
-                      .IsRequired();
+            //builder.Property(u => u.Role)
+            //          .HasConversion<string>()
+            //          .IsRequired();
 
             builder.Property(u => u.CreatedAt)
                 .HasDefaultValueSql("GetDate()")
@@ -52,54 +53,68 @@ namespace MaktabShop.Infra.SqlServer.EFCore.Configurations
                 .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            var hasher = new PasswordHasher<AppUser>();
+
             builder.HasData(
-                 new User
+                 new AppUser
                  {
                      Id = 1,
-                     Username = "ghazal",
-                     PasswordHash = "123456",   
+                     UserName = "ghazal",
+                     NormalizedUserName = "GHAZAL",
+                     PasswordHash = hasher.HashPassword(null, "123456"),
                      FirstName = "غزل",
                      LastName = "مسیحا",
-                     Phone = "09123456789",
+                     PhoneNumber = "09123456789",
                      Address = "تهران، شهرک غرب",
                      Wallet = 10000000M,
-                     Role = Core_MaktabShop.Domain.Core.UserAgg.Enums.RoleEnum.NormaUser
+                     SecurityStamp = Guid.NewGuid().ToString("D"),
+                     ConcurrencyStamp = Guid.NewGuid().ToString("D"),
+                     LockoutEnabled = false,
                  },
-                new User
+                new AppUser
                 {
                     Id = 2,
-                    Username = "mersedeh",
-                    PasswordHash = "123456",
+                    UserName = "mersedeh",
+                    NormalizedUserName = "MERSEDEH",
+                    PasswordHash = hasher.HashPassword(null, "123456"),
                     FirstName = "مرسده",
                     LastName = "کسروی",
-                    Phone = "09111223344",
+                    PhoneNumber = "09111223344",
                     Address = "رشت، گلسار",
                     Wallet = 7000000,
-                    Role = Core_MaktabShop.Domain.Core.UserAgg.Enums.RoleEnum.NormaUser
+                    SecurityStamp = Guid.NewGuid().ToString("D"),
+                    ConcurrencyStamp = Guid.NewGuid().ToString("D"),
+                    LockoutEnabled = false,
                 },
-                new User
+                new AppUser
                 {
                     Id = 3,
-                    Username = "amir",
-                    PasswordHash = "123456",
+                    UserName = "amir",
+                    NormalizedUserName = "AMIR",
+                    PasswordHash = hasher.HashPassword(null, "123456"),
                     FirstName = "امیر",
                     LastName = "ساعدی نیا",
-                    Phone = "09111223343",
+                    PhoneNumber = "09111223343",
                     Address = "تهران، پونک",
                     Wallet = 5000000M,
-                    Role = Core_MaktabShop.Domain.Core.UserAgg.Enums.RoleEnum.NormaUser
+                    SecurityStamp = Guid.NewGuid().ToString("D"),
+                    ConcurrencyStamp = Guid.NewGuid().ToString("D"),
+                    LockoutEnabled = false,
                 },
-                new User
+                new AppUser
                 {
                     Id = 4,
-                    Username = "admin",
-                    PasswordHash = "123456",
+                    UserName = "admin",
+                    NormalizedUserName = "ADMIN",
+                    PasswordHash = hasher.HashPassword(null, "123456"),
                     FirstName = "ادمین",
                     LastName = "1",
-                    Phone = "09111223342",
+                    PhoneNumber = "09111223342",
                     Address = "تهران",
                     Wallet = 100000000M,
-                    Role = Core_MaktabShop.Domain.Core.UserAgg.Enums.RoleEnum.Admin
+                    SecurityStamp = Guid.NewGuid().ToString("D"),
+                    ConcurrencyStamp = Guid.NewGuid().ToString("D"),
+                    LockoutEnabled = false,
                 }
                 );
 

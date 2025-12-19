@@ -1,4 +1,5 @@
-﻿using Core_MaktabShop.Domain.Core.ProductAgg.Contracts.AppServiceContract;
+﻿using AppService_MaktabShop.Domain.AppService.AppServices;
+using Core_MaktabShop.Domain.Core.ProductAgg.Contracts.AppServiceContract;
 using Core_MaktabShop.Domain.Core.ProductAgg.DTOs;
 using MaktabShop_EndPoimt.MVC.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +30,7 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
                 Price = p.Price,
                 Stock = p.Stock,
                 CategoryName = p.CategoryName
+
             }).ToList();
 
             return View(vm);
@@ -74,6 +76,19 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
                 logger.LogWarning("ادمین: محصول با شناسه {ProductId} پیدا نشد", id); 
                 return NotFound();
             }
+
+            var p = res.Data;
+
+            var vm = new ProductCreateDto
+            {
+                Name = p.Name,
+                CategoryId = p.CategoryId,
+                Price = p.Price,
+                Stock = p.Stock,
+                ImageUrl = p.ImageUrl,
+                Description = p.Description
+            };
+
 
             return View(res.Data);
         }

@@ -25,7 +25,8 @@ else
     else
     {
         <form asp-action="Confirm" asp-controller="Checkout" method="post">
-            <button type="submit" class="btn">پرداخت و ثبت سفارش</button>
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-primary">پرداخت و ثبت سفارش</button>
         </form>
     }
 }
