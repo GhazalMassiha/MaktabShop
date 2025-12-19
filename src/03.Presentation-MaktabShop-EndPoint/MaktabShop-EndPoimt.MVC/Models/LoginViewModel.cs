@@ -9,6 +9,7 @@ namespace MaktabShop_EndPoimt.MVC.Models
         public string Username { get; set; }
 
         [Required(ErrorMessage = "رمز عبور الزامی است.")]
+        [MinLength(6)]
         public string Password { get; set; }
     }
 }
