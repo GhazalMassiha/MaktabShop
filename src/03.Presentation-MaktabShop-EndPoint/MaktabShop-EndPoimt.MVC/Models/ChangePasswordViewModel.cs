@@ -4,10 +4,10 @@ namespace MaktabShop_EndPoimt.MVC.Models
 {
     public class ChangePasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "رمز عبور قبلی الزامی است.")]
         public string OldPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "رمز عبور جدید الزامی است.")]
         [MinLength(6)]
         public string NewPassword { get; set; }
 

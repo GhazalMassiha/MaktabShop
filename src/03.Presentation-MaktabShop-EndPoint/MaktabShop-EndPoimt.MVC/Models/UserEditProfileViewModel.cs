@@ -10,8 +10,10 @@ namespace MaktabShop_EndPoimt.MVC.Models
         [Required(ErrorMessage = "نام خانوادگی الزامی است.")]
         public string LastName { get; set; }
 
-        [Phone]
+        [Required(ErrorMessage = "شماره همراه الزامی است.")]
         public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "آدرس الزامی است.")]
         public string Address { get; set; }
 
         [Display(Name = "کیف پول")]
