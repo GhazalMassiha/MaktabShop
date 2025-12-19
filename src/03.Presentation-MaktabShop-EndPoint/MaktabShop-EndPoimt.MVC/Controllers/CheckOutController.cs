@@ -79,7 +79,7 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
             }
 
             var cart = GetCartFromSession();
-            decimal total = cart.Total;
+            decimal total = cart.TotalPrice;
             logger.LogInformation("جمع کل سفارش کاربر {UserId} معادل {Total}", userId, total);
 
             var orderDto = new OrderCreateDto

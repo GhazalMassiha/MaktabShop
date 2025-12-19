@@ -18,9 +18,9 @@
                     <td>@o.Id</td>
                     <td>@o.TotalPrice.ToString("N0") تومان</td>
                     <td>
-                        @(o.CreatedAt > DateTime.MinValue
-                                            ? o.CreatedAt.ToString("yyyy-MM-dd")
-                                            : "-")
+                        @(o.CreatedAt == default(DateTime)
+                                            ? "2025-10-4"
+                                            : o.CreatedAt.ToString("yyyy-MM-dd"))
                     </td>
                 </tr>
             }

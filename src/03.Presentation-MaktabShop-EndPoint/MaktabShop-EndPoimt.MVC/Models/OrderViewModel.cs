@@ -2,7 +2,10 @@
 {
     public class OrderViewModel
     {
+        public int Id { get; set; }
+        public DateTime CreatedAt  { get; set; }
         public List<OrderItemViewModel> Items { get; set; } = new();
-        public decimal Total => Items.Sum(i => i.TotalPrice);
+        public decimal TotalPrice => Items.Sum(i => i.TotalPrice);
+        public decimal Total => TotalPrice;
     }
 }

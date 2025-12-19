@@ -14,10 +14,10 @@ else
 {
     <div style="margin-bottom:1rem;">
         <h3>موجودی کیف پول شما: @Model.WalletBalance.ToString("N0") تومان</h3>
-        <h3>جمع کل: @Model.Order.Total.ToString("N0") تومان</h3>
+        <h3>جمع کل: @Model.Order.TotalPrice.ToString("N0") تومان</h3>
     </div>
 
-    @if (Model.WalletBalance < Model.Order.Total)
+    @if (Model.WalletBalance < Model.Order.TotalPrice)
     {
         <p style="color:red;">موجودی حساب شما کافی نیست.</p>
         <a asp-controller="Cart" asp-action="Index">بازگشت به سبد خرید</a>

@@ -162,6 +162,12 @@ namespace MaktabShop_EndPoimt.MVC.Controllers
 
             var userOrders = res.Data
                 .Where(o => o.UserId == user.Id)
+                 .Select(o => new Core_MaktabShop.Domain.Core.OrderAgg.DTOs.OrderDto
+                 {
+                    Id = o.Id,
+                    TotalPrice = o.TotalPrice,
+                    CreatedAt = o.CreatedAt
+                })
                 .ToList();
 
             logger.LogInformation("تعداد {Count} سفارش برای {Username} بازیابی شد", userOrders.Count, user.UserName);
